@@ -1,4 +1,4 @@
-# Data Science Capstone:Online Shopping Purchase Intention
+# Data Science Capstone: Online Shopping Purchase Intention
 
 ## 1. Data Question
 
@@ -8,7 +8,7 @@ The goal is to explore which visitor characteristics and browsing behaviors are 
 
 ## 2. Data Source
 
-The dataset used in this project is the **Online Shoppers Purchasing Intention Dataset**, available from the UCI Machine Learning Repository.
+The dataset used in this project is the **_Online Shoppers Purchasing Intention Dataset_**, available from the UCI Machine Learning Repository.
 
 Source: [https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset](https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset)
 
@@ -31,13 +31,13 @@ In this project, we will explore the dataset and identify patterns that may help
 ## 5. Work Completed So Far
 
 - Loaded the dataset into a pandas DataFrame named `osi`.
-- Inspected the dataset using `info()` and `head()`.
+- Inspected the dataset using `info` and `head`.
 - Checked the dataset dimensions using `shape`.
-- Reviewed descriptive statistics using `describe().T`.
-- Checked for missing values using `isnull().sum()`.
-- Checked for duplicate rows using `duplicated().sum()` and found 125 duplicates.
-- Explored the distribution of the target variable `Revenue` using `value_counts()` and a bar chart.
-- Compared average `ProductRelated`, `ProductRelated_Duration`, `BounceRates`, `ExitRates`, `PageValues`, and `SpecialDay` values between sessions with and without a purchase using `groupby()` and `mean()`.
+- Reviewed descriptive statistics using `describe`.
+- Checked for missing values using `isnull`.
+- Checked for duplicate rows using `duplicated` and found 125 duplicates.
+- Explored the distribution of the target variable `Revenue` using `value_counts` and a bar chart.
+- Compared average `ProductRelated`, `ProductRelated_Duration`, `BounceRates`, `ExitRates`, `PageValues`, and `SpecialDay` values between sessions with and without a purchase using `groupby` and `mean`.
 - Examined purchase counts by `VisitorType`.
 - Visualized the distribution of sessions by `VisitorType`.
 - Examined the number of sessions by `Month`.
