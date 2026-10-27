@@ -1,8 +1,8 @@
-# Online Shopping Purchase Intention: Data Science Capstone
+# Data Science Capstone:Online Shopping Purchase Intention
 
 ## 1. Data Question
 
-**Which visitor characteristics and browsing behaviors are associated with online purchase conversion?**
+**_Which visitor characteristics and browsing behaviors are associated with online purchase conversion?_**
 
 The goal is to explore which visitor characteristics and browsing behaviors are related to her a website session ends with a purchase.
 
