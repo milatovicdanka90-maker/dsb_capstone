@@ -4,7 +4,7 @@
 
 **_Which visitor characteristics and browsing behaviors are associated with online purchase conversion?_**
 
-The goal is to explore which visitor characteristics and browsing behaviors are related to her a website session ends with a purchase.
+The goal is to explore which visitor characteristics and browsing behaviors are related to whether a website session ends with a purchase.
 
 ## 2. Data source
 
