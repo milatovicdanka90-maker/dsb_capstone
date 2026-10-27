@@ -1,12 +1,12 @@
-# Data Science Capstone: Online Shopping Purchase Intention
+# Data Science Capstone: Online shopping purchase intention
 
-## 1. Data science Question
+## 1. Data science question
 
 **_Which visitor characteristics and browsing behaviors are associated with online purchase conversion?_**
 
 The goal is to explore which visitor characteristics and browsing behaviors are related to her a website session ends with a purchase.
 
-## 2. Data Source
+## 2. Data source
 
 The dataset used in this project is the **_Online Shoppers Purchasing Intention Dataset_**, available from the UCI Machine Learning Repository.
 
@@ -14,13 +14,13 @@ Source: [https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+inte
 
 The dataset contains 12.330 website sessions and 18 columns. It includes information about visitor types, browsing activity, time spent on different pages, traffic sources, and whether a purchase was made. The target variable is `Revenue`, which indicates whether a session resulted in a purchase.
 
-## 3. Problem Description
+## 3. Problem description
 
 Not every website visit results in a purchase. Understanding which visitor characteristics and browsing behaviors are associated with purchases can help us better understand online shopping patterns.
 
 In this project, we will explore the dataset and identify patterns that may help explain the difference between sessions with and without a purchase. Later, we plan to use classification models to predict whether a website session will result in a purchase.
 
-## 4. Potential Challenges
+## 4. Potential challenges
 
 - **Class imbalance:** There are many more sessions without a purchase than sessions with a purchase.
 - **Duplicate rows:** The dataset contains 125 duplicate rows, which need to be reviewed before modeling.
@@ -28,7 +28,7 @@ In this project, we will explore the dataset and identify patterns that may help
 - **Interpretation of results:** A relationship between a variable and a purchase does not necessarily mean that the variable causes the purchase.
 - **Model evaluation:** Accuracy alone may not be enough to evaluate model performance because the target classes are imbalanced.
 
-## 5. Work Completed So Far
+## 5. Work completed so far
 
 - Loaded the dataset into a pandas DataFrame named `osi`.
 - Inspected the dataset using `info` and `head`.
