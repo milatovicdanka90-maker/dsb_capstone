@@ -1,44 +1,101 @@
-# Data Science Capstone: Online shopping purchase intention
+Data Science Capstone: Agricultural Machinery Price Evaluation
 
-## 1. Data science question
+1. Data science question
 
-**_Which visitor characteristics and browsing behaviors are associated with online purchase conversion?_**
+Is a quoted agricultural machinery price within 30% of a reasonable regional market price?
 
-The goal is to explore which visitor characteristics and browsing behaviors are related to whether a website session ends with a purchase.
+The goal of this project is to explore whether Data Science can help estimate realistic prices for new agricultural machinery.
 
-## 2. Data source
+I would like to investigate whether a model could help automate machinery price evaluations and reduce the need for manual price checks by the Evaluation Committee.
 
-The dataset used in this project is the **_Online Shoppers Purchasing Intention Dataset_**, available from the UCI Machine Learning Repository.
+2. Data source
 
-Source: [https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset](https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset)
+This project uses three datasets.
 
-The dataset contains 12.330 website sessions and 18 columns. It includes information about visitor types, browsing activity, time spent on different pages, traffic sources, and whether a purchase was made. The target variable is `Revenue`, which indicates whether a session resulted in a purchase.
+Dataset 1: Agricultural Machinery Prices
 
-## 3. Problem description
+File: Mechanization_prices_EN.xlsx
 
-Not every website visit results in a purchase. Understanding which visitor characteristics and browsing behaviors are associated with purchases can help us better understand online shopping patterns.
+This dataset contains historical machinery price evaluations from the Agency for Payments in Agriculture.
 
-In this project, we will explore the dataset and identify patterns that may help explain the difference between sessions with and without a purchase. Later, we plan to use classification models to predict whether a website session will result in a purchase.
+It includes information about machinery suppliers, machinery types, models, prices submitted by applicants, prices found by the Evaluation Committee, and final evaluated prices.
 
-## 4. Potential challenges
+Dataset 2: Agricultural Investments
 
-- **Class imbalance:** There are many more sessions without a purchase than sessions with a purchase.
-- **Duplicate rows:** The dataset contains 125 duplicate rows, which need to be reviewed before modeling.
-- **Different data types:** The dataset includes numerical and categorical variables.
-- **Interpretation of results:** A relationship between a variable and a purchase does not necessarily mean that the variable causes the purchase.
-- **Model evaluation:** Accuracy alone may not be enough to evaluate model performance because the target classes are imbalanced.
+File: Mechanization_English.xlsx
 
-## 5. Work completed so far
+This dataset contains information about agricultural investments, including total investment amounts and production sectors.
 
-- Loaded the dataset into a pandas DataFrame named `osi`.
-- Inspected the dataset using `info` and `head`.
-- Checked the dataset dimensions using `shape`.
-- Reviewed descriptive statistics using `describe`.
-- Checked for missing values using `isnull`.
-- Checked for duplicate rows using `duplicated` and found 125 duplicates.
-- Explored the distribution of the target variable `Revenue` using `value_counts` and a bar chart.
-- Compared average `ProductRelated`, `ProductRelated_Duration`, `BounceRates`, `ExitRates`, `PageValues`, and `SpecialDay` values between sessions with and without a purchase using `groupby` and `mean`.
-- Examined purchase counts by `VisitorType`.
-- Visualized the distribution of sessions by `VisitorType`.
-- Examined the number of sessions by `Month`.
-- Compared purchase and non-purchase counts across months.
+I plan to connect this dataset with the first dataset by grouping machinery items by investment number and comparing their total values.
+
+Dataset 3: Agricultural Machinery — USA
+
+File: machinery_all_with_production_sector.csv
+
+This dataset contains 438 records of agricultural machinery from four US data tables.
+
+It includes machinery types, purchase prices in USD, working hours, useful life, and operating costs.
+
+I also added a production_sector column to show which agricultural sectors each machine can be used in. Some machines can be used in more than one sector.
+
+The US data will be used for additional analysis. I will also check whether these prices can be compared with prices in Montenegro and the region.
+
+3. Problem description
+
+I work at the Agency for Payments in Agriculture, where one of our tasks is to check whether the prices of agricultural machinery submitted by applicants are realistic.
+
+Currently, an Evaluation Committee researches market prices and compares them with the prices submitted by applicants.
+
+The Agency uses price deviation levels of 10%, 15%, and 30% when evaluating machinery prices.
+
+Depending on the difference between the submitted price and the reference price, the proposed price may be accepted, reduced, or rejected.
+
+This process takes time because market prices must be checked manually.
+
+In this project, I want to explore whether Data Science can help estimate reasonable prices for new agricultural machinery using previous evaluations and other available data.
+
+My long-term goal is to develop a tool that could reduce or possibly replace the need for Evaluation Committee checks for standard agricultural machinery.
+
+The Committee would still be needed for construction works, special equipment, and other investments that cannot be easily compared with standard market products.
+
+4. Potential challenges
+
+Combining datasets: The three datasets contain different information and need to be prepared before they can be used together.
+
+Matching investment amounts: Small differences caused by rounding may make it difficult to connect records from the first two datasets.
+
+Missing or incorrect data: Some records may contain missing information or values that need to be checked.
+
+Machinery types: Different machines have different characteristics and prices, which may make price prediction more difficult.
+
+Production sectors: Some machines, such as tractors, can be used in several agricultural sectors.
+
+Different markets: The US dataset contains prices in dollars, while the Agency's data contains prices in euros. Market differences also need to be considered.
+
+Model accuracy: The model may not always predict the correct market price, especially when there are not enough similar machines in the dataset.
+
+5. Work completed so far
+
+Defined the main Data Science question and project goal.
+
+Selected three datasets for the project.
+
+Reviewed the structure and columns of the datasets.
+
+Prepared English versions of the Agency's datasets.
+
+Checked the number of rows and columns in the datasets.
+
+Reviewed missing values and duplicate records in the US dataset.
+
+Combined four US machinery tables into one dataset containing 438 records.
+
+Added a production_sector column to the US dataset.
+
+Identified possible problems when connecting investment amounts from the first two datasets.
+
+Planned to use groupby() to calculate total investment amounts.
+
+Planned to use merge() to connect the datasets.
+
+The next step is to continue working in Python using pandas. I will clean and explore the data, try to connect the datasets, and later test whether a model can predict reasonable machinery prices.
