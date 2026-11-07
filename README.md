@@ -1,6 +1,6 @@
-#Data Science Capstone: Agricultural Machinery Price Evaluation
+# Data Science Capstone: Agricultural Machinery Price Evaluation
 
-##1. Data science question
+## 1. Data science question
 
 Is a quoted agricultural machinery price within 30% of a reasonable regional market price?
 
