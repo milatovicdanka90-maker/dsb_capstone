@@ -2,8 +2,8 @@
 
 ## 1. Data science question
 
-Is a quoted agricultural machinery price within 30% of a reasonable regional market price?
-
+_Is a quoted agricultural machinery price within 30% of a reasonable regional market price?
+_
 The goal of this project is to explore whether Data Science can help estimate realistic prices for new agricultural machinery.
 
 I would like to investigate whether a model could help automate machinery price evaluations and reduce the need for manual price checks by the Evaluation Committee.
