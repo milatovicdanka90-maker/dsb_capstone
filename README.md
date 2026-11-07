@@ -8,29 +8,29 @@ The goal of this project is to explore whether Data Science can help estimate re
 
 I would like to investigate whether a model could help automate machinery price evaluations and reduce the need for manual price checks by the Evaluation Committee.
 
-2. Data source
+## 2. Data source
 
 This project uses three datasets.
 
-Dataset 1: Agricultural Machinery Prices
+_Dataset 1: Agricultural Machinery Prices_
 
-File: Mechanization_prices_EN.xlsx
+File: Mechanization_prices.xlsx
 
 This dataset contains historical machinery price evaluations from the Agency for Payments in Agriculture.
 
 It includes information about machinery suppliers, machinery types, models, prices submitted by applicants, prices found by the Evaluation Committee, and final evaluated prices.
 
-Dataset 2: Agricultural Investments
+_Dataset 2: Agricultural Investments_
 
-File: Mechanization_English.xlsx
+File: Mechanization.xlsx
 
 This dataset contains information about agricultural investments, including total investment amounts and production sectors.
 
 I plan to connect this dataset with the first dataset by grouping machinery items by investment number and comparing their total values.
 
-Dataset 3: Agricultural Machinery — USA
+_Dataset 3: Agricultural Machinery — USA_
 
-File: machinery_all_with_production_sector.csv
+File: Machinery_USA.csv
 
 This dataset contains 438 records of agricultural machinery from four US data tables.
 
@@ -40,7 +40,7 @@ I also added a production_sector column to show which agricultural sectors each 
 
 The US data will be used for additional analysis. I will also check whether these prices can be compared with prices in Montenegro and the region.
 
-3. Problem description
+## 3. Problem description
 
 I work at the Agency for Payments in Agriculture, where one of our tasks is to check whether the prices of agricultural machinery submitted by applicants are realistic.
 
@@ -58,7 +58,7 @@ My long-term goal is to develop a tool that could reduce or possibly replace the
 
 The Committee would still be needed for construction works, special equipment, and other investments that cannot be easily compared with standard market products.
 
-4. Potential challenges
+## 4. Potential challenges
 
 Combining datasets: The three datasets contain different information and need to be prepared before they can be used together.
 
@@ -74,7 +74,7 @@ Different markets: The US dataset contains prices in dollars, while the Agency's
 
 Model accuracy: The model may not always predict the correct market price, especially when there are not enough similar machines in the dataset.
 
-5. Work completed so far
+## 5. Work completed so far
 
 Defined the main Data Science question and project goal.
 
