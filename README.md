@@ -97,9 +97,11 @@ There are no missing values in the USA dataset.
 
 The main question of this project is whether Data Science can help determine if the prices of new agricultural machinery are realistic compared to market prices.
 
-Currently, agricultural machinery prices are checked by an Evaluation Committee, which researches market prices and compares them with the prices submitted by farmers.
+The Evaluation Committee researches market prices and compares them with the prices submitted by farmers.
 
-The evaluation process uses price deviation levels of 10%, 15%, and 30%. Depending on the difference between the submitted price and the reference price, the proposed price may be accepted, reduced, or rejected.
+The evaluation process uses price deviation levels of 10%, 15%, and 30%, based on the difference between the farmer's quoted price and the market price found by the Committee.
+
+Depending on this difference, the Committee proposes an acceptable price, or the machinery item may be rejected if the price difference exceeds 30%.
 
 This process takes time because market prices must be checked manually.
 
