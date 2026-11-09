@@ -20,9 +20,9 @@ The datasets include information about machinery prices, investment amounts, pro
 
 ## 3. Data Description
 
-**Dataset 1: Agricultural Machinery Prices**
+**Dataset 1: Agricultural Mechanization Prices**
 
-File: `Mechanization_prices_EN.xlsx`
+File: `Mechanization_prices.xlsx`
 
 - 6,622 rows and 12 columns.
 - Contains information about machinery suppliers, equipment names, manufacturers, models, quoted prices, reference prices from the Evaluation Committee, and final evaluated prices.
@@ -31,16 +31,16 @@ File: `Mechanization_prices_EN.xlsx`
 
 **Dataset 2: Agricultural Investments**
 
-File: `Mechanization_English.xlsx`
+File: `Mechanization.xlsx`
 
 - 695 rows and 13 columns.
 - Contains information about agricultural investments, total requested investment amounts, investment types, and production sectors.
 - Includes 9 production sectors.
 - Some records have missing information about the production sector.
 
-**Dataset 3: USA Agricultural Machinery**
+**Dataset 3: USA Agricultural MEchanization**
 
-File: `machinery_all_with_production_sector.csv`
+File: `Machinery_USA.csv`
 
 - 438 rows and 14 columns.
 - Contains information about machinery types, purchase prices in USD, working hours, useful life, and operating costs.
