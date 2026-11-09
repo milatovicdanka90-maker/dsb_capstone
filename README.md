@@ -38,7 +38,7 @@ File: `Mechanization.xlsx`
 - Includes 9 production sectors.
 - Some records have missing information about the production sector.
 
-**Dataset 3: USA Agricultural MEchanization**
+**Dataset 3: USA Agricultural Machinery**
 
 File: `Machinery_USA.csv`
 
