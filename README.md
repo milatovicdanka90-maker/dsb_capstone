@@ -29,10 +29,10 @@ The `Mechanization_prices.xlsx` dataset is used for the main price analysis and 
 
 - Python
 - pandas
-- NumPy
+- Numpy
 - Matplotlib
 - Seaborn
-- scikit-learn (for future modeling)
+- Scikit-learn (for future modeling)
 
 ## 4. Exploratory Data Analysis (EDA)
 
