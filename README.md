@@ -1,148 +1,154 @@
-# Data Science Capstone: Agricultural Machinery Price Evaluation
+# Data Science Capstone: Agricultural Mechanization Price Evaluation
 
 ## 1. Data Science Question
 
-***Is a quoted agricultural machinery price within 30% of a reasonable regional market price?***
+**Is a quoted agricultural mechanization price within 30% of a reasonable regional market price?**
 
-The goal of this project is to explore whether Data Science can help estimate realistic prices for new agricultural machinery.
+The goal of this project is to explore whether Data Science can help estimate realistic prices for new agricultural mechanization.
 
-I would like to investigate whether a model could help to predict or maybe automate machinery price evaluations and reduce the need for manual price checks by the Evaluation Committee.
+I would like to investigate whether a machine learning model could help predict reference prices and support the evaluation process, reducing the need for manual price checks by the Evaluation Committee.
 
-## 2. Data Source
+The project uses historical price data to compare farmers' quoted prices with reference prices.
 
-This project uses three datasets.
+The planned approach is to predict a reference price and then check whether the quoted price falls within a ±30% range.
 
-The first two datasets come from historical agricultural machinery evaluations and investment records of the Agency for Payments in Agriculture.
+## 2. Datasets
 
-The third dataset contains agricultural machinery information from the USA, combined from four publicly available data tables.
+Two Excel datasets are used in this project:
 
-The datasets include information about machinery prices, investment amounts, production sectors, and machinery characteristics.
+| Dataset | Records | Columns | Description |
+| --- | ---: | ---: | --- |
+| `Mechanization_prices.xlsx` | 6.622 | 12 | Mechanization types, manufacturers, models, quoted prices, and reference prices |
+| `Mechanization.xlsx` | 695 | 13 | Investment amounts, production sectors, municipalities, and investment descriptions |
 
-## 3. Data Description
+The two datasets are analyzed separately because there is no confirmed common identifier to reliably connect them.
 
-**Dataset 1: Agricultural Mechanization Prices**
+The `Mechanization_prices.xlsx` dataset is used for the main price analysis and planned machine learning model.
 
-File: `Mechanization_prices.xlsx`
+## 3. Tools and Libraries
 
-- 6,622 rows and 12 columns.
-- Contains information about machinery suppliers, equipment names, manufacturers, models, quoted prices, reference prices from the Evaluation Committee, and final evaluated prices.
-- Includes price deviation levels of 10%, 15%, and 30% from the asking price.
-- Some rows have missing information, so further data cleaning is needed.
+- Python
+- pandas
+- NumPy
+- Matplotlib
+- Seaborn
+- scikit-learn (for future modeling)
 
-**Dataset 2: Agricultural Investments**
+## 4. Exploratory Data Analysis (EDA)
 
-File: `Mechanization.xlsx`
+The first part of the analysis focuses on understanding the datasets.
 
-- 695 rows and 13 columns.
-- Contains information about agricultural investments, total requested investment amounts, investment types, and production sectors.
-- Includes 9 production sectors.
-- Some records have missing information about the production sector.
+The following steps were performed:
 
-**Dataset 3: USA Agricultural Machinery**
+- Checking dataset shapes, data types, and basic statistics
+- Identifying missing values and duplicate records
+- Exploring quoted and reference prices
+- Analyzing price deviations
+- Checking how many quoted prices fall within the ±30% threshold
+- Visualizing reference price distributions
+- Exploring investment amounts and production sectors
 
-File: `Machinery_USA.csv`
+The investment amount analysis also revealed two unusually high values that required further investigation.
 
-- 438 rows and 14 columns.
-- Contains information about machinery types, purchase prices in USD, working hours, useful life, and operating costs.
-- An additional `production_sector` column was added to show which agricultural sectors each machine can be used in.
-- Some machines can be used in more than one production sector. These sectors are separated by `|`.
+## 5. Data Cleaning and Preparation
 
-### Relationship Between Datasets
+### Mechanization Prices Dataset
 
-The first dataset contains individual machinery items and their prices, while the second dataset contains information about agricultural investments.
+The original dataset contains **6.622 records**.
 
-I plan to use `groupby()` to calculate the total machinery investment amount for each investment number in the first dataset.
+After removing records without essential information, **3.970 records** remained.
 
-Then, I will try to connect these totals with the investment amounts in the second dataset using `merge()`. Small differences caused by rounding will need to be considered.
+During data cleaning:
 
-This would allow me to connect machinery prices with agricultural production sectors.
+- 37 non-numeric evaluation notes were identified and preserved in a separate column.
+- 3.520 records were found to have numeric reference prices.
+- 450 records without numeric reference prices were excluded from the main price analysis.
+- 16 duplicate rows were identified but retained because some may represent repeated items within an investment.
+- No zero or negative quoted or numeric reference prices were found.
 
-The third dataset contains additional machinery information from the USA.
+The final dataset used for price analysis, `prices_analysis`, contains **3.520 records**.
 
-I added the `production_sector` column to show which sectors the machines can be used in and to help compare different types of machinery.
+### Mechanization Investments Dataset
 
-However, the US dataset will first be analyzed separately because machinery prices in the USA may not be directly comparable with prices in Montenegro and the region.
+During EDA, two unusually high investment amounts were identified:
 
-## 4. Data Types
+| Record No. | Investment Amount |
+| --- | ---: |
+| 677 | 4.035.392,00 EUR |
+| 678 | 7.617.603,00 EUR |
 
-The three datasets contain numerical and categorical data.
+These amounts were also present in the original Excel file, but the correct values could not be confirmed.
 
-**Dataset 1: Mechanization_prices**
+The two records were excluded from the cleaned investment dataset, while the original data remained unchanged.
 
-- `float64`: 7 columns
-- `object`: 5 columns
+After cleaning, `investments_clean` contains **693 records and 13 columns**.
 
-Most price columns are numerical. However, the reference price column also contains some text notes, so it needs further cleaning.
+The investment amount distribution was visualized again. Most investments have relatively low values, while a smaller number have higher amounts.
 
-**Dataset 2: Mechanization**
+The distribution remains right-skewed.
 
-- `int64`: 1 column
-- `float64`: 3 columns
-- `object`: 9 columns
+## 6. Main Findings
 
-The numerical columns contain investment amounts and record numbers, while the text columns contain information such as investment types and production sectors.
+The price deviation was calculated using the following formula:
 
-**Dataset 3: Machinery_USA**
+**Price Deviation (%) = (Quoted Price − Reference Price) / Reference Price × 100**
 
-- `float64`: 9 columns
-- `object`: 5 columns
+Among the 3.520 records with both quoted and reference prices:
 
-The numerical columns contain machinery prices, working hours, useful life, and operating costs.
+| Price Evaluation | Records | Percentage |
+| --- | ---: | ---: |
+| Within ±30% of the reference price | 2.908 | 82,6% |
+| Outside ±30% of the reference price | 612 | 17,4% |
 
-The text columns contain information about equipment types, groups, sizes, cost basis, and production sectors.
+Most quoted prices fall within the selected threshold.
 
-There are no missing values in the USA dataset.
+However, some prices show much larger positive deviations, with the highest reaching approximately 400%.
 
-## 5. Problem Description
+Reference prices are also right-skewed, with many lower-priced items and a smaller number of expensive machines.
 
-The main question of this project is whether Data Science can help determine if the prices of new agricultural machinery are realistic compared to market prices.
+These results describe historical price differences and do not represent machine learning predictions.
 
-The Evaluation Committee researches market prices and compares them with the prices submitted by farmers.
+## 7. Feature Engineering
 
-The evaluation process uses price deviation levels of 10%, 15%, and 30%, based on the difference between the farmer's quoted price and the market price found by the Committee.
+Four features were selected for future machine learning modeling:
 
-Depending on this difference, the Committee proposes an acceptable price, or the machinery item may be rejected if the price difference exceeds 30%.
+| Feature | Description |
+| --- | --- |
+| `Equipment / Item` | Type of mechanization |
+| `Manufacturer / Brand` | Manufacturer |
+| `Applicant Quoted Price (EUR)` | Farmer's quoted price |
+| `Model / Specifications` | Model and technical specifications |
 
-This process takes time because market prices must be checked manually.
+The target variable (`y`) is:
 
-In this project, I want to explore whether Data Science can help estimate reasonable prices for new agricultural machinery using previous evaluations and other available data.
+**`Evaluation Committee Reference Price (EUR)`**
 
-My long-term goal is to develop a tool that could reduce or possibly replace the need for Evaluation Committee checks for standard agricultural machinery.
+Missing values in the manufacturer and model specifications columns were replaced with `Unknown`.
 
-The Committee would still be needed for construction works, special equipment, and other investments that cannot be easily compared with standard market products.
+After preparation, there are no missing values in the selected features.
 
-## 6. Potential Challenges
+The text features still need to be transformed into numerical representations before model training.
 
-- **Data cleaning:** Some records contain missing values or text in columns that should contain numbers.
-- **Combining datasets:** The datasets have different structures and need to be prepared before they can be connected.
-- **Matching investment amounts:** Small differences caused by rounding may make it difficult to match records from the first two datasets.
-- **Duplicate records:** Some machinery items appear more than once, so I need to check whether they are real duplicates or multiple items in the same investment.
-- **Preparing data for modeling:** I will need to select the information that can help predict machinery prices.
+## 8. Next Steps
 
-## 7. Limitations
+The next stage of the project will focus on machine learning.
 
-This project may have some limitations:
+The planned steps are:
 
-- **Historical data:** Machinery prices change over time, so older prices may not reflect current market prices.
-- **Market differences:** Machinery prices in the USA may be different from prices in Montenegro and the region.
-- **Missing information:** Some records do not contain all the technical details needed for accurate price comparison.
-- **Comparable machinery:** There may not be enough similar machines in the datasets to predict prices accurately.
-- **Model reliability:** The model may work better for common machinery than for less common or specialised equipment.
+1. Split the dataset into training and test sets while taking investment groups into account.
+2. Encode categorical features and transform text specifications.
+3. Build a baseline regression model to predict reference prices.
+4. Evaluate model performance using appropriate regression metrics.
+5. Compare predicted reference prices with farmers' quoted prices.
+6. Check whether quoted prices fall within the ±30% threshold.
 
-These limitations will be considered when evaluating the model and interpreting the results.
+The final goal is to explore whether machine learning can support more consistent and efficient mechanization price evaluations.
 
-## 8. Model Evaluation
+## 9. Project Files
 
-The target variable for this project will be `Evaluation Committee Reference Price (EUR)`.
+- `01_EDA.ipynb` – Exploratory Data Analysis, data cleaning, and feature preparation
+- `Mechanization_prices.xlsx` – Historical mechanization price data
+- `Mechanization.xlsx` – Investment information
+- `README.md` – Project description and current results
 
-The goal is to build a model that can predict a reasonable reference price for new agricultural machinery based on available machinery information.
-
-I plan to evaluate the model using three regression metrics:
-
-- **MAE (Mean Absolute Error):** Shows the average difference between predicted and actual reference prices.
-- **RMSE (Root Mean Squared Error):** Helps identify larger prediction errors.
-- **R² (R-squared):** Shows how well the model explains differences in machinery prices.
-
-I will also compare the predicted reference prices with the prices submitted by farmers to see whether the model could help identify prices that are too high.
-
-The results will help me understand whether the model could reduce the need for manual price evaluations by the Evaluation Committee.
+**Project status:** EDA, data cleaning, and initial feature preparation have been completed. Machine learning modeling and evaluation are the next stages.
