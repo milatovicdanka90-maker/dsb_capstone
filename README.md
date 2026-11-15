@@ -30,12 +30,12 @@ A Data Dictionary is included in the notebook to explain the columns in both dat
 ## 3. Tools and Libraries
 
 - Python
-- pandas
-- NumPy
+- Pandas
+- Numpy
 - Matplotlib
 - Seaborn
 - Google Colab
-- scikit-learn (for future modeling)
+- Scikit-learn (for future modeling)
 
 ## 4. Exploratory Data Analysis (EDA)
 
