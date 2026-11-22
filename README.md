@@ -186,7 +186,6 @@ Future work could:
 - Add independent regional market prices.
 - Test more robust train/test strategies.
 - Assess false-acceptance risk more thoroughly.
-- Incorporate the actual Evaluation Committee decision rules.
 
 Any deployment would require further validation and human oversight.
 
