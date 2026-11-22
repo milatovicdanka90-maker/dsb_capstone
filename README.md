@@ -1,200 +1,195 @@
-# Data Science Capstone: Agricultural Mechanization Price Evaluation
+# Agricultural Mechanization Price Analysis and Evaluation
 
-## 1. Data Science Question
+**Data Science Capstone Project | Exploratory Data Analysis and Machine Learning**
 
-**Is a quoted agricultural machinery price within 30% of a reasonable regional market price?**
+## Project Overview
 
-The goal of this project is to explore whether Data Science can help estimate realistic prices for new agricultural mechanization.
+This project investigates whether machine learning can support the Evaluation Committee in assessing farmers' quoted prices for agricultural mechanization.
 
-I would like to investigate whether a machine learning model could help predict reference prices and support the evaluation process, reducing the need for manual price checks by the Evaluation Committee.
+**Research question:** Is a quoted agricultural mechanization price within ±30% of a reasonable reference price?
 
-The project uses historical price data to compare farmers' quoted prices with reference prices.
+The analysis uses historical reference prices established by the Evaluation Committee. Regression models estimate these prices, and the predicted values are compared with farmers' quoted prices using an experimental ±30% threshold.
 
-The planned approach is to predict a reference price and then check whether the quoted price falls within a ±30% range.
+The results are intended to explore **decision support**, not automatic approval or rejection.
 
-## 2. Datasets
+## Data Source
 
-Two Excel datasets are used in this project:
+The project uses `Mechanization_prices.xlsx`, a historical Excel dataset provided for this Capstone and authorized for use in the project.
 
-| Dataset | Records | Columns | Description |
-|---|---:|---:|---|
-| `Mechanization_prices.xlsx` | 6.622 | 12 | Mechanization types, manufacturers, models, quoted prices, and reference prices |
-| `Mechanization.xlsx` | 695 | 13 | Investment amounts, production sectors, municipalities, and investment descriptions |
+It contains **6.622 rows and 12 columns**, including equipment descriptions, manufacturers, specifications, suppliers, farmers' quoted prices, and Evaluation Committee reference prices.
 
-The two datasets are analyzed separately because there is no confirmed common identifier to reliably connect them.
+The original Excel file is available in the [GitHub repository](https://github.com/milatovicdanka90-maker/dsb_capstone).
 
-The `Mechanization_prices.xlsx` dataset is used for the main price analysis and planned machine learning model.
+The exact historical data collection dates are not documented, and the source data is not modified in place.
 
-A Data Dictionary is included in the notebook to explain the columns in both datasets.
+## Tools
 
-## 3. Tools and Libraries
+- Python and Google Colab
+- pandas and NumPy
+- Matplotlib and Seaborn
+- scikit-learn (preprocessing pipelines, Linear Regression, Ridge Regression, Random Forest, and evaluation metrics)
 
-- Python
-- Pandas
-- Numpy
-- Matplotlib
-- Seaborn
-- Google Colab
-- Scikit-learn (for future modeling)
+## Notebook 01 — Exploratory Data Analysis
 
-## 4. Exploratory Data Analysis (EDA)
+The EDA notebook examines data structure, missing values, reference price notes, duplicates, price distributions, and deviations between quoted and historical reference prices.
 
-The first part of the analysis focuses on understanding the datasets.
+### Cleaning and Preparation
 
-The following steps were performed:
+| Step | Records |
+| --- | ---: |
+| Original mechanization price dataset | 6.622 |
+| Records with the required identifier, equipment description, and quoted price | 3.970 |
+| Records without a numeric reference price at this stage | 450 |
+| Records after removing 16 exact duplicate rows | 3.954 |
+| Final dataset with both numeric quoted and reference prices | **3.505** |
 
-- Checking dataset shapes, data types, and basic statistics
-- Identifying missing values as percentages of total records
-- Checking duplicate records
-- Exploring quoted and reference prices
-- Analyzing price deviations
-- Checking how many quoted prices fall within the ±30% threshold
-- Visualizing reference price distributions
-- Exploring investment amounts and production sectors
-- Investigating unusually high investment amounts
+The original reference-price column includes **37 non-numeric evaluation notes**. These were retained in a separate column.
 
-### Missing Values
+Of the 450 records without numeric reference prices, 37 contain such notes and 413 have no reference information.
 
-The mechanization prices dataset has around 40% missing values in several columns.
+The 16 exact duplicate rows were removed after recording their frequencies in `Record Frequency`.
 
-The `Manufacturer / Brand` column has the highest percentage, at 49,85%.
+The final cleaned dataset is exported as `prices_analysis_clean.csv` (**3.505 rows and 17 columns**).
 
-This may be related to the structure of the original Excel file, where many rows have incomplete mechanization information.
+The processed CSV is also available in the repository at [`Data/Processed/prices_analysis_clean.csv`](Data/Processed/prices_analysis_clean.csv).
 
-The investments dataset has very few missing values. The highest percentage is in `Primary Production Sector` (1,44%).
+### Main EDA Findings
 
-All three financial columns in the investments dataset have no missing values.
+Price deviation is calculated as:
 
-## 5. Data Cleaning and Preparation
+`Price Deviation (%) = (Quoted Price - Reference Price) / Reference Price × 100`
 
-### Mechanization Prices Dataset
+| Historical comparison | Records | Share |
+| --- | ---: | ---: |
+| Within ±30% of the historical reference price | 2.893 | 82,5% |
+| Outside ±30% | 612 | 17,5% |
 
-The original dataset contains **6.622 records**.
+Most quoted prices are in the lower price ranges:
 
-After filtering records without essential information, **3.970 records** remained.
+- **3.435 records (98,0%)** have quoted prices up to **50.000 EUR**.
+- **70 records (2,0%)** exceed that amount.
 
-During data cleaning:
+These findings motivated the modeling experiments.
 
-- 37 non-numeric evaluation notes were identified and preserved in a separate column.
-- 3.520 records had numeric reference prices before removing duplicates.
-- 450 records had no numeric reference price and were excluded from the main price analysis.
-- 16 exact duplicate rows were identified and removed.
-- A new column, `Record Frequency`, was created to preserve information about repeated records.
-- Equipment names were reviewed, and one unclear description was corrected.
-- No zero or negative quoted or numeric reference prices were found.
+## Notebook 02 — Modeling
 
-The duplicate analysis showed that:
+The modeling notebook reads the processed CSV directly from the GitHub repository.
 
-- 3.941 records appeared once.
-- 10 records appeared twice.
-- 3 records appeared three times.
+The file was checked against the final EDA export and confirmed to be identical.
 
-After removing duplicates, `prices_clean` contains **3.954 records**.
+**Prediction target:** `Evaluation Committee Reference Price (EUR)`.
 
-The final dataset used for price analysis, `prices_analysis`, contains **3.505 records** with both quoted and reference prices.
+The initial models use four features:
 
-### Mechanization Investments Dataset
+1. `Equipment / Item`
+2. `Manufacturer / Brand`
+3. `Model / Specifications`
+4. `Applicant Quoted Price (EUR)`
 
-During EDA, two unusually high investment amounts were identified:
+Missing categorical values are filled with `Unknown`.
 
-| Record No. | Investment Amount |
-|---|---:|
-| 677 | 4.035.392,00 EUR |
-| 678 | 7.617.603,00 EUR |
+Categorical features are one-hot encoded, and the numeric feature is scaled within the modeling pipelines.
 
-These amounts were also present in the original Excel file, but the correct values could not be confirmed.
+Columns derived from reference prices and historical deviation outcomes are not used as predictors.
 
-The two records were excluded from the cleaned investment dataset, while the original data remained unchanged.
+### Experiment 1 — Equipment Quoted Up to 50.000 EUR
 
-After cleaning, `investments_clean` contains **693 records**.
+Linear Regression, Ridge Regression, and Random Forest were compared using **3.435 records**, with **2.748 training** and **687 test** records.
 
-The investment amount distribution was visualized again. Most investments have relatively low values, while a smaller number have much higher amounts.
+A mean-price baseline provided a benchmark.
 
-The distribution remains right-skewed.
+| Model | Test MAE (EUR) | Test RMSE (EUR) | R² |
+| --- | ---: | ---: | ---: |
+| Mean-price baseline | 6.867,39 | — | — |
+| Linear Regression | 556,75 | 1.770,56 | 0,9661 |
+| Ridge Regression | **308,08** | **791,98** | **0,9932** |
+| Random Forest | 319,76 | 892,17 | 0,9914 |
 
-### Investment Tiers
+Ridge Regression had the lowest test MAE in this experiment.
 
-The investment amounts were divided into two groups using **100.000 EUR** as a threshold.
+However, its ±30% classification matched **600 of 687** historical comparisons (**87,34%**) and produced **63 false acceptances** and **24 false rejections**.
 
-| Investment Tier | Records | Percentage | Average Amount |
-|---|---:|---:|---:|
-| Lower Investments (up to 100.000 EUR) | 535 | 77,2% | 47.435,57 EUR |
-| Higher Investments (above 100.000 EUR) | 158 | 22,8% | 280.357,01 EUR |
+Of the **134** actually outside-range records, **63** were incorrectly marked within range.
 
-This division helps compare smaller and larger investments separately.
+Therefore, a low regression error does not by itself guarantee a safe price-evaluation decision.
 
-A second concentration of investments appears near **650.000 EUR**.
+### Experiment 2 — Complete Dataset
 
-The public call defined an investment range from 10.000 to 650.000 EUR, excluding VAT. This may explain the concentration near the upper limit.
+Ridge Regression was trained using all **3.505 records** (**2.804 training** and **701 test**).
 
-The threshold of 100.000 EUR was selected as a practical division for analysis, rather than a statistically confirmed boundary between two groups.
+The original 687 lower-priced test records were retained for a fair comparison, and 14 higher-priced records were added to the test set.
 
-## 6. Main Findings
+On the full 701-record test set, Ridge Regression achieved:
 
-The price deviation was calculated using the following formula:
+- **MAE:** 426,98 EUR
+- **RMSE:** 1.380,89 EUR
+- **R²:** 0,9926
 
-**Price Deviation (%) = (Quoted Price − Reference Price) / Reference Price × 100**
+On the *same 687 lower-priced test records*, the Ridge model trained on 98% of the dataset had an MAE of **308,08 EUR**, compared with **322,46 EUR** for the model trained on the complete dataset.
 
-The calculated deviations were compared with the original deviation values, after converting them to percentages.
+However, false acceptances decreased from **63 to 53**, while false rejections increased from **24 to 32**.
 
-The results matched almost exactly for 3.500 records. Five records had missing original deviation values.
+For the **14 higher-priced test records**, the complete-data model had an MAE of **5.556,40 EUR**, with zero false acceptances or false rejections under the experimental threshold.
 
-Among the **3.505 records** with both quoted and reference prices:
+This sample is too small to establish reliable performance on higher-priced equipment.
 
-| Price Evaluation | Records | Percentage |
-|---|---:|---:|
-| Within ±30% of the reference price | 2.893 | 82,5% |
-| Outside ±30% of the reference price | 612 | 17,5% |
+### Experiment 3 — Without the Farmer's Quoted Price
 
-Most quoted prices fall within the selected threshold.
+A Ridge Regression model was trained using only equipment type, manufacturer, and model specifications.
 
-However, some prices show much larger positive deviations, with the highest reaching almost 400%.
+It was evaluated on the same train/test records as the four-feature model from Experiment 2.
 
-Reference prices are also right-skewed, with many lower-priced items and a smaller number of expensive machines.
+- **MAE:** 1.709,72 EUR, versus 426,98 EUR with four features
+- **R²:** 0,8631, versus 0,9926 with four features
+- **Non-positive predicted reference prices:** 9, flagged for manual review
+- **Among 692 valid predictions:** 45 false acceptances and 139 false rejections
 
-These results describe historical price differences and do not represent machine learning predictions.
+On the same 692 valid records, the four-feature model had **48 false acceptances**.
 
-## 7. Feature Engineering
+Although removing the quoted price slightly reduced false acceptances on these records, it substantially worsened reference-price prediction and increased false rejections.
 
-Four features were selected for future machine learning modeling:
+This experiment highlights an important trade-off: the farmer's quoted price improves predictive accuracy, but a reference price derived partly from the farmer's own offer may not be sufficiently independent for evaluation purposes.
 
-| Feature | Description |
-|---|---|
-| `Equipment / Item` | Type of mechanization |
-| `Manufacturer / Brand` | Manufacturer |
-| `Applicant Quoted Price (EUR)` | Farmer's quoted price |
-| `Model / Specifications` | Model and technical specifications |
+## Interpretation and Limitations
 
-The target variable (`y`) is:
+The current models are **not suitable for automatic price approval or rejection**.
 
-**`Evaluation Committee Reference Price (EUR)`**
+Important limitations include:
 
-Missing values in the manufacturer and model specifications columns were replaced with `Unknown`.
+- The prediction target is a **historical committee reference price**, not an independently verified regional market price.
+- The experimental ±30% comparison is a **simplification** and does not reproduce the Evaluation Committee's full tiered decision procedure.
+- False acceptances remain an important operational risk, even for models with strong regression metrics.
+- The dataset lacks potentially important information, such as equipment condition, year of manufacture, standardized detailed specifications, and current market prices.
+- Only 70 records are above 50.000 EUR, with 14 in the higher-priced test set.
+- Evaluation uses a single train/test split; similar equipment may appear in both sets, potentially making performance estimates optimistic.
+- The quoted-price input can make estimated reference prices dependent on the applicant's offer.
 
-After preparation, there are no missing values in the four selected features.
+The results support further investigation of a **human-in-the-loop decision-support tool**.
 
-The text features still need to be transformed into numerical representations before model training.
+The Evaluation Committee should retain responsibility for final decisions.
 
-## 8. Next Steps
+## How to Run the Notebooks
 
-The next stage of the project will focus on machine learning.
+1. Open the notebooks in Google Colab, starting with `01_EDA.ipynb`.
+2. Download `Mechanization_prices.xlsx` from the [GitHub repository](https://github.com/milatovicdanka90-maker/dsb_capstone) and upload it to the Colab session when needed. The EDA code expects the filename `Mechanization_prices.xlsx` in the current working directory.
+3. Run the EDA notebook from top to bottom. It generates `prices_analysis_clean.csv`.
+4. Open `02_modelling.ipynb` and run it from top to bottom. Modeling reads `Data/Processed/prices_analysis_clean.csv` directly from GitHub, so manual CSV upload is not needed.
+5. If the cleaned EDA output is changed later, update the processed CSV on GitHub before rerunning Modeling so both notebooks use the same version.
 
-The planned steps are:
+**Note:** Google Colab sessions are temporary. The source Excel file may need to be uploaded again after restarting a session. Notebook filenames in the repository should be used as listed there if they differ in capitalization or spelling.
 
-1. Split the dataset into training and test sets while taking investment groups into account.
-2. Encode categorical features and transform text specifications.
-3. Build a baseline regression model to predict reference prices.
-4. Evaluate model performance using appropriate regression metrics.
-5. Compare predicted reference prices with farmers' quoted prices.
-6. Check whether quoted prices fall within the ±30% threshold.
+## Next Steps
 
-The final goal is to explore whether machine learning can support more consistent and efficient mechanization price evaluations.
+Future work could:
 
-## 9. Project Files
+- Improve equipment-name standardization.
+- Add independent regional market prices.
+- Test more robust train/test strategies.
+- Assess false-acceptance risk more thoroughly.
+- Incorporate the actual Evaluation Committee decision rules.
 
-- `01_EDA.ipynb` – Exploratory Data Analysis, data cleaning, and feature preparation
-- `Mechanization_prices.xlsx` – Historical mechanization price data
-- `Mechanization.xlsx` – Investment information
-- `README.md` – Project description and current results
+Any deployment would require further validation and human oversight.
 
-**Project status:** EDA, data cleaning, and initial feature preparation have been completed. Machine learning modeling and evaluation are the next stages.
+---
+
+**Project status:** EDA, data preparation, three modeling experiments, error analysis, and initial evaluation are complete. The project is a research prototype, not a production decision system.
